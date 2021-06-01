@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
     "type-check": "tsc --pretty --noEmit",
-    "format": "prettier --write \"**/*.{js,ts,tsx}\""
+    "format": "prettier --write \"**/*.{js,ts,tsx}\"",
+    "test": "jest",
+    "test:us": "jest --updateSnapshot"
   },
   "husky": {
     "hooks": {
@@ -30,6 +32,8 @@
     "sass": "^1.34.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^11.2.7",
+    "@types/jest": "^26.0.23",
     "@types/react": "17.0.8",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
@@ -38,8 +42,10 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "husky": "^6.0.0",
+    "jest": "^27.0.3",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
+    "ts-jest": "^27.0.2",
     "typescript": "4.3.2"
   }
 }
