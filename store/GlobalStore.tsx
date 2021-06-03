@@ -1,7 +1,7 @@
 import React, { Dispatch, useReducer } from 'react'
 import immer from 'immer'
 
-export interface GlobalStore {
+export type GlobalStore = {
   searchNumber: number
 }
 
@@ -25,7 +25,7 @@ const reducer = immer((draft: GlobalStore, action: GlobalAction) => {
   }
 })
 
-interface StoreWithAction {
+type StoreWithAction = {
   globalStore: GlobalStore
   globalDispatch: Dispatch<GlobalAction>
 }
