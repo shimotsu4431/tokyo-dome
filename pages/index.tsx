@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import React from 'react'
+import { Form } from '../components/Form'
 import styles from '../styles/Pages/Home.module.scss'
 
 export default function Home() {
@@ -12,6 +14,7 @@ export default function Home() {
 
       <div className={styles.container}>
         <main>main</main>
+        <Form />
       </div>
     </div>
   )

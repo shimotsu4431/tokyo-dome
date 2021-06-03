@@ -1,0 +1,49 @@
+import React, { Dispatch, useReducer } from 'react'
+import immer from 'immer'
+
+export interface GlobalStore {
+  searchNumber: number
+}
+
+export type GlobalAction = {
+  type: 'CHANGE_SEARCH_NUMBER'
+  payload: number
+}
+
+/** グローバルステートの初期値 */
+export const initialState: GlobalStore = {
+  searchNumber: 0,
+}
+
+/** reducer */
+const reducer = immer((draft: GlobalStore, action: GlobalAction) => {
+  switch (action.type) {
+    case 'CHANGE_SEARCH_NUMBER': {
+      draft.searchNumber = action.payload
+      break
+    }
+  }
+})
+
+interface StoreWithAction {
+  globalStore: GlobalStore
+  globalDispatch: Dispatch<GlobalAction>
+}
+
+export const globalStoreContext = React.createContext<StoreWithAction>({
+  globalStore: initialState,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  globalDispatch: () => {},
+})
+
+const GlobalStoreProvider: React.FC = ({ children }) => {
+  const [globalStore, globalDispatch] = useReducer(reducer, initialState)
+
+  return (
+    <globalStoreContext.Provider value={{ globalStore, globalDispatch }}>
+      {children}
+    </globalStoreContext.Provider>
+  )
+}
+
+export default GlobalStoreProvider
