@@ -11,7 +11,8 @@
     "format": "prettier --write \"**/*.{js,ts,tsx}\"",
     "test": "jest",
     "test:us": "jest --updateSnapshot",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "prepare": "husky install .config/husky"
   },
   "husky": {
     "hooks": {
