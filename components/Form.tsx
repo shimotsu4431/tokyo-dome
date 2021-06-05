@@ -19,16 +19,21 @@ export const Form: React.FC = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input
-        type="number"
-        value={globalStore.searchNumber}
-        onChange={(e) =>
-          globalDispatch({
-            type: 'CHANGE_SEARCH_NUMBER',
-            payload: Number(e.target.value),
-          })
-        }
-      />
+      <div>
+        <label htmlFor="area">面積：</label>
+        <input
+          type="number"
+          name="area"
+          id="area"
+          value={globalStore.searchNumber}
+          onChange={(e) =>
+            globalDispatch({
+              type: 'CHANGE_SEARCH_NUMBER',
+              payload: Number(e.target.value),
+            })
+          }
+        />
+      </div>
     </form>
   )
 }
