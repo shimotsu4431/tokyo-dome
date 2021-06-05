@@ -3,16 +3,23 @@ import immer from 'immer'
 
 export type GlobalStore = {
   searchNumber: number
+  searchPref: number
 }
 
-export type GlobalAction = {
-  type: 'CHANGE_SEARCH_NUMBER'
-  payload: number
-}
+export type GlobalAction =
+  | {
+      type: 'CHANGE_SEARCH_NUMBER'
+      payload: number
+    }
+  | {
+      type: 'CHANGE_SEARCH_PREF'
+      payload: number
+    }
 
 /** グローバルステートの初期値 */
 export const initialState: GlobalStore = {
   searchNumber: 0,
+  searchPref: 1,
 }
 
 /** reducer */
@@ -20,6 +27,10 @@ const reducer = immer((draft: GlobalStore, action: GlobalAction) => {
   switch (action.type) {
     case 'CHANGE_SEARCH_NUMBER': {
       draft.searchNumber = action.payload
+      break
+    }
+    case 'CHANGE_SEARCH_PREF': {
+      draft.searchPref = action.payload
       break
     }
   }
