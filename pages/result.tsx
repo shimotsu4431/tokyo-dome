@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import React, { useContext } from 'react'
+import { Layout } from '../components/Layout'
 import { globalStoreContext } from '../store/GlobalStore'
 
 export const Result: React.FC = () => {
@@ -12,9 +13,12 @@ export const Result: React.FC = () => {
         <meta name="description" content="result page." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        <p>{globalStore.searchNumber}</p>
-      </div>
+
+      <Layout>
+        <div>
+          <p>{globalStore.searchNumber}</p>
+        </div>
+      </Layout>
     </>
   )
 }

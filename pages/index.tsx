@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import React from 'react'
 import { Form } from '../components/Form'
+import { Layout } from '../components/Layout'
 import styles from '../styles/Pages/Home.module.scss'
 
 export default function Home() {
@@ -12,10 +13,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className={styles.container}>
-        <main>main</main>
-        <Form />
-      </div>
+      <Layout>
+        <div className={styles.container}>
+          <Form />
+        </div>
+      </Layout>
     </div>
   )
 }

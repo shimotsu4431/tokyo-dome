@@ -1,0 +1,15 @@
+.header {
+  padding: 20px;
+}
+
+.headerTitle {
+  margin: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.mainContainer {
+  padding: 20px;
+}
