@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import React from 'react'
-import { Form } from '../components/Form'
+import { FormContainer } from '../components/FormContainer'
 import { Layout } from '../components/Layout'
 import styles from '../styles/Pages/Home.module.scss'
 
@@ -15,7 +15,7 @@ export default function Home() {
 
       <Layout>
         <div className={styles.container}>
-          <Form />
+          <FormContainer />
         </div>
       </Layout>
     </div>
