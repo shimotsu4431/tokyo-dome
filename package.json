@@ -10,7 +10,8 @@
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write \"**/*.{js,ts,tsx}\"",
     "test": "jest",
-    "test:us": "jest --updateSnapshot"
+    "test:us": "jest --updateSnapshot",
+    "postinstall": "husky install"
   },
   "husky": {
     "hooks": {
@@ -25,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "husky": "^6.0.0",
     "immer": "^9.0.2",
     "next": "10.2.3",
     "react": "17.0.2",
@@ -42,7 +44,6 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
-    "husky": "^6.0.0",
     "jest": "^27.0.3",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
