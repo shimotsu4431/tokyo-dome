@@ -19,7 +19,7 @@ export type GlobalAction =
 /** グローバルステートの初期値 */
 export const initialState: GlobalStore = {
   searchNumber: 0,
-  searchPref: 1,
+  searchPref: 0,
 }
 
 /** reducer */

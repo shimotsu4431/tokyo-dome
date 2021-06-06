@@ -1,0 +1,11 @@
+prefs:
+  documentID: areaID
+  name: String
+  createdAt: Date
+
+  areas:
+    documentID: auto
+    name: String
+    area: Number
+    prefID: String
+    createdAt: Date
