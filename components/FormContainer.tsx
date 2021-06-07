@@ -23,6 +23,7 @@ export const FormContainer: React.FC = () => {
     <form onSubmit={onSubmit}>
       <AreaForm />
       <PrefForm />
+      <button>確定</button>
     </form>
   )
 }
