@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Layout } from '../components/Layout'
 import { globalStoreContext } from '../store/GlobalStore'
 import prefData from '../lib/pref'
@@ -36,6 +36,14 @@ export const Result: React.FC = () => {
     getData(prefId)
   }, [])
 
+  const comparedNum = useMemo(() => {
+    if (!selectedArea) return
+
+    const value = globalStore.searchNumber / selectedArea.area
+
+    return value
+  }, [selectedArea])
+
   return (
     <>
       <Head>
@@ -46,7 +54,7 @@ export const Result: React.FC = () => {
 
       <Layout>
         <div>
-          <p>{globalStore.searchNumber}</p>
+          <p>{globalStore.searchNumber} km^2</p>
           <p>{prefData[globalStore.searchPref]}</p>
           {areas && (
             <div>
@@ -56,6 +64,14 @@ export const Result: React.FC = () => {
           {selectedArea && (
             <div>
               <pre>{JSON.stringify(selectedArea)}</pre>
+            </div>
+          )}
+          {selectedArea && (
+            <div>
+              <p>
+                {globalStore.searchNumber} km^2 は、{selectedArea.name}{' '}
+                {comparedNum} 個分の広さです。
+              </p>
             </div>
           )}
         </div>
