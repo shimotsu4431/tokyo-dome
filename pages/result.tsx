@@ -4,14 +4,21 @@ import { Layout } from '../components/Layout'
 import { globalStoreContext } from '../store/GlobalStore'
 import prefData from '../lib/pref'
 import firebase, { db } from '../lib/firebase'
+import { useRouter } from 'next/router'
 
 export const Result: React.FC = () => {
+  const router = useRouter()
   const [areas, setAreas] =
     useState<firebase.firestore.DocumentData[] | null>(null)
   const { globalStore } = useContext(globalStoreContext)
   const prefId = String(globalStore.searchPref)
 
   useEffect(() => {
+    if (globalStore.searchNumber === 0) {
+      alert('数値が入力されていません')
+      router.push('/')
+    }
+
     const data: firebase.firestore.DocumentData[] = []
     async function getData(prefId: string) {
       const querySnapshot = await db.collection(prefId).get()
