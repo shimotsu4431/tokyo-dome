@@ -19,6 +19,7 @@ export const AreaForm: React.FC = () => {
           })
         }
       />
+      <span>m^2</span>
     </div>
   )
 }
