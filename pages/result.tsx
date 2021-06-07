@@ -6,7 +6,8 @@ import prefData from '../lib/pref'
 import firebase, { db } from '../lib/firebase'
 
 export const Result: React.FC = () => {
-  const [areas, setAreas] = useState<any>(null)
+  const [areas, setAreas] =
+    useState<firebase.firestore.DocumentData[] | null>(null)
   const { globalStore } = useContext(globalStoreContext)
   const prefId = String(globalStore.searchPref)
 
