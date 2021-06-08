@@ -3,10 +3,12 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Layout } from '../components/Layout'
 import styles from '../styles/pages/Register.module.scss'
+import prefData from '../lib/pref'
 
 type FormType = {
   name: string
   area: number
+  pref: number
 }
 
 export const Register: React.FC = () => {
@@ -17,9 +19,10 @@ export const Register: React.FC = () => {
   } = useForm()
 
   const onSubmit = (data: FormType) => {
-    const { name, area } = data
-    console.log('area: ', area)
+    const { name, area, pref } = data
+    console.log('area: ', Number(area))
     console.log('name: ', name)
+    console.log('pref: ', Number(pref))
   }
 
   return (
@@ -36,6 +39,20 @@ export const Register: React.FC = () => {
         </div>
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <label htmlFor="pref">都道府県：</label>
+            <select
+              className={styles.select}
+              id="pref"
+              {...register('pref', { required: true })}
+            >
+              {prefData.map((p, idx) => {
+                return (
+                  <option key={idx} value={idx}>
+                    {p}
+                  </option>
+                )
+              })}
+            </select>
             <label>名称</label>
             <input
               className={styles.input}
@@ -50,6 +67,7 @@ export const Register: React.FC = () => {
               {...register('area', {
                 required: true,
                 pattern: /[0-9.,０-９．，]+/u, // 半角 or 全角数字
+                min: 1,
               })}
             />
             {errors.area && <p>area is required</p>}
