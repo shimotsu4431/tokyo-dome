@@ -4,11 +4,12 @@ import { useForm } from 'react-hook-form'
 import { Layout } from '../components/Layout'
 import styles from '../styles/pages/Register.module.scss'
 import prefData from '../lib/pref'
+import { db } from '../lib/firebase'
 
 type FormType = {
   name: string
   area: number
-  pref: number
+  prefId: string
 }
 
 export const Register: React.FC = () => {
@@ -19,10 +20,24 @@ export const Register: React.FC = () => {
   } = useForm()
 
   const onSubmit = (data: FormType) => {
-    const { name, area, pref } = data
+    const { name, area, prefId } = data
     console.log('area: ', Number(area))
     console.log('name: ', name)
-    console.log('pref: ', Number(pref))
+    console.log('pref: ', prefId)
+
+    db.collection(prefId)
+      .doc()
+      .set({
+        name: name,
+        area: Number(area),
+        isRegistered: false,
+      })
+      .then(() => {
+        console.log('Document successfully written!')
+      })
+      .catch((error: any) => {
+        console.error('Error writing document: ', error)
+      })
   }
 
   return (
@@ -43,7 +58,7 @@ export const Register: React.FC = () => {
             <select
               className={styles.select}
               id="pref"
-              {...register('pref', { required: true })}
+              {...register('prefId', { required: true })}
             >
               {prefData.map((p, idx) => {
                 return (
