@@ -15,10 +15,13 @@ export type GlobalAction =
       type: 'CHANGE_SEARCH_PREF'
       payload: number
     }
+  | {
+      type: 'RESET'
+    }
 
 /** グローバルステートの初期値 */
 export const initialState: GlobalStore = {
-  searchNumber: 1,
+  searchNumber: 100,
   searchPref: 1,
 }
 
@@ -31,6 +34,11 @@ const reducer = immer((draft: GlobalStore, action: GlobalAction) => {
     }
     case 'CHANGE_SEARCH_PREF': {
       draft.searchPref = action.payload
+      break
+    }
+    case 'RESET': {
+      draft.searchPref = 1
+      draft.searchNumber = 100
       break
     }
   }

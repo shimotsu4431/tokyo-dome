@@ -1,10 +1,19 @@
 import Head from 'next/head'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { FormContainer } from '../components/FormContainer'
 import { Layout } from '../components/Layout'
+import { globalStoreContext } from '../store/GlobalStore'
 import styles from '../styles/Pages/Home.module.scss'
 
-export default function Home() {
+export const Home: React.FC = () => {
+  const { globalDispatch } = useContext(globalStoreContext)
+
+  useEffect(() => {
+    globalDispatch({
+      type: 'RESET',
+    })
+  }, [])
+
   return (
     <div>
       <Head>
@@ -21,3 +30,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home

@@ -2,13 +2,13 @@ import Head from 'next/head'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Layout } from '../components/Layout'
 import { globalStoreContext } from '../store/GlobalStore'
-import prefData from '../lib/pref'
 import firebase, { db } from '../lib/firebase'
 import { useRouter } from 'next/router'
 import { shuffle } from 'lodash'
 
 export const Result: React.FC = () => {
   const router = useRouter()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [areas, setAreas] =
     useState<firebase.firestore.DocumentData[] | null>(null)
   const [selectedArea, setSelectedArea] =
@@ -28,7 +28,6 @@ export const Result: React.FC = () => {
       querySnapshot.forEach((postDoc) => {
         data.push(postDoc.data())
       })
-      console.log(data)
       setAreas(data)
       setSelectedArea(shuffle(data)[0])
     }
@@ -40,7 +39,6 @@ export const Result: React.FC = () => {
     if (!selectedArea) return
 
     const value = globalStore.searchNumber / selectedArea.area
-
     return value
   }, [selectedArea])
 
@@ -54,22 +52,10 @@ export const Result: React.FC = () => {
 
       <Layout>
         <div>
-          <p>{globalStore.searchNumber} km^2</p>
-          <p>{prefData[globalStore.searchPref]}</p>
-          {areas && (
-            <div>
-              <pre>{JSON.stringify(areas)}</pre>
-            </div>
-          )}
-          {selectedArea && (
-            <div>
-              <pre>{JSON.stringify(selectedArea)}</pre>
-            </div>
-          )}
           {selectedArea && (
             <div>
               <p>
-                {globalStore.searchNumber} km^2 は、{selectedArea.name}{' '}
+                {globalStore.searchNumber} km^2 は、{selectedArea.name}の約{' '}
                 {comparedNum} 個分の広さです。
               </p>
             </div>
