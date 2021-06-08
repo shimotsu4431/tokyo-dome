@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import React, { useContext, useEffect } from 'react'
 import { FormContainer } from '../components/FormContainer'
 import { Layout } from '../components/Layout'
@@ -25,6 +26,11 @@ export const Home: React.FC = () => {
       <Layout>
         <div className={styles.container}>
           <FormContainer />
+        </div>
+        <div style={{ marginTop: 30 }}>
+          <Link href="/register">
+            <a>登録ページへ</a>
+          </Link>
         </div>
       </Layout>
     </div>
