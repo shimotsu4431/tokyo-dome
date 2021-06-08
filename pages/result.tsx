@@ -39,7 +39,7 @@ export const Result: React.FC = () => {
     if (!selectedArea) return
 
     const value = globalStore.searchNumber / selectedArea.area
-    return value
+    return value.toFixed(2)
   }, [selectedArea])
 
   return (
