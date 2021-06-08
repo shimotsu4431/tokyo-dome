@@ -53,16 +53,18 @@ export const Register: React.FC = () => {
                 )
               })}
             </select>
-            <label>名称</label>
+            <label htmlFor="name">名称</label>
             <input
+              id="name"
               className={styles.input}
               {...register('name', { required: true })}
               defaultValue="○○公園"
             />
             {errors.name && <p>name is required</p>}
-            <label>広さ</label>
+            <label htmlFor="area">広さ</label>
             <input
               type="number"
+              id="area"
               className={styles.input}
               {...register('area', {
                 required: true,
