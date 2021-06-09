@@ -38,6 +38,7 @@ export const Register: React.FC = () => {
       })
       .catch((error: any) => {
         console.error('Error writing document: ', error)
+        alert('送信エラー！')
       })
   }
 
