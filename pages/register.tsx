@@ -1,10 +1,12 @@
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Layout } from '../components/Layout'
 import styles from '../styles/pages/Register.module.scss'
 import prefData from '../lib/pref'
 import { db } from '../lib/firebase'
+import firebase from '../lib/firebase'
+import 'firebase/auth'
 
 type FormType = {
   name: string
@@ -38,6 +40,21 @@ export const Register: React.FC = () => {
         console.error('Error writing document: ', error)
       })
   }
+
+  useEffect(() => {
+    // 匿名ログイン実行
+    async function initFirebase() {
+      firebase.auth().onAuthStateChanged(async (user) => {
+        if (!user) {
+          await firebase.auth().signInAnonymously()
+        } else {
+          console.log(user)
+        }
+      })
+    }
+
+    initFirebase()
+  }, [])
 
   return (
     <div>
