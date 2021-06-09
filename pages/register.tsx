@@ -16,14 +16,12 @@ export const Register: React.FC = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm()
 
   const onSubmit = (data: FormType) => {
     const { name, area, prefId } = data
-    console.log('area: ', Number(area))
-    console.log('name: ', name)
-    console.log('pref: ', prefId)
 
     db.collection(prefId)
       .doc()
@@ -33,7 +31,8 @@ export const Register: React.FC = () => {
         isRegistered: false,
       })
       .then(() => {
-        console.log('Document successfully written!')
+        alert('データを送信しました！')
+        reset()
       })
       .catch((error: any) => {
         console.error('Error writing document: ', error)
@@ -73,7 +72,6 @@ export const Register: React.FC = () => {
               id="name"
               className={styles.input}
               {...register('name', { required: true })}
-              defaultValue="○○公園"
             />
             {errors.name && <p>name is required</p>}
             <label htmlFor="area">広さ</label>
