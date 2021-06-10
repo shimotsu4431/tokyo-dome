@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Layout } from '../components/Layout'
 import firebase, { db } from '../lib/firebase'
 import prefData from '../lib/pref'
@@ -14,7 +14,7 @@ export const Admin: React.FC = () => {
     async function getPrefData(prefId: string) {
       const querySnapshot = await db.collection(prefId).get()
       querySnapshot.forEach((postDoc) => {
-        data.push({ ...postDoc.data() })
+        data.push({ ...postDoc.data(), docId: postDoc.id })
       })
     }
 
@@ -27,6 +27,11 @@ export const Admin: React.FC = () => {
     }
 
     getAllData()
+  }, [])
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value)
+    console.log(e.target.checked)
   }, [])
 
   return (
@@ -47,6 +52,17 @@ export const Admin: React.FC = () => {
               return (
                 <li key={d.name}>
                   【{prefData[d.prefId - 1].name}】{d.name}: {d.area}[m^2]
+                  <label style={{ marginLeft: 15, display: 'inline-block' }}>
+                    <input
+                      type="checkbox"
+                      name="isRegistered"
+                      id="isRegistered"
+                      value={d.docId}
+                      defaultChecked={d.isRegistered}
+                      onChange={(e) => handleChange(e)}
+                    ></input>
+                    isRegistered
+                  </label>
                 </li>
               )
             })}
