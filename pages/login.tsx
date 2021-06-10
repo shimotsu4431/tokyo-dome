@@ -29,13 +29,14 @@ export const Login: React.FC = () => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        console.log('userCredential.user', userCredential.user)
-
         if (userCredential.user) {
+          const { uid, email } = userCredential.user
+
           globalDispatch({
             type: 'CHANGE_USER',
-            payload: userCredential.user,
+            payload: { uid, email },
           })
+
           alert('ログインしました！')
         }
       })

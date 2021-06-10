@@ -1,11 +1,15 @@
 import React, { Dispatch, useReducer } from 'react'
-import firebase from '../lib/firebase'
 import immer from 'immer'
+
+export type mappedUserData = {
+  uid: string
+  email: string | null
+}
 
 export type GlobalStore = {
   searchNumber: number
   searchPref: number
-  user: firebase.User | null
+  user: mappedUserData | null
 }
 
 export type GlobalAction =
@@ -22,7 +26,7 @@ export type GlobalAction =
     }
   | {
       type: 'CHANGE_USER'
-      payload: firebase.User
+      payload: mappedUserData
     }
 
 /** グローバルステートの初期値 */
