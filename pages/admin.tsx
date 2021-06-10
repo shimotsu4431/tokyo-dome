@@ -55,7 +55,6 @@ export const Admin: React.FC = () => {
                   <label style={{ marginLeft: 15, display: 'inline-block' }}>
                     <input
                       type="checkbox"
-                      name="isRegistered"
                       id="isRegistered"
                       value={d.docId}
                       defaultChecked={d.isRegistered}
