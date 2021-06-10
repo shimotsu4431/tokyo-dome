@@ -29,10 +29,22 @@ export const Admin: React.FC = () => {
     getAllData()
   }, [])
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
-    console.log(e.target.checked)
-  }, [])
+  const handleChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (window.confirm('ステートを変更しますか？')) {
+        const data = JSON.parse(e.target.value)
+        const docId = data.docId
+        const prefId = data.prefId
+        // 該当ドキュメントのステート変更
+        const dataRef = db.collection(String(prefId)).doc(docId)
+        await dataRef.update({
+          isRegistered: e.target.checked,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+      }
+    },
+    []
+  )
 
   return (
     <div>
@@ -56,7 +68,7 @@ export const Admin: React.FC = () => {
                     <input
                       type="checkbox"
                       id="isRegistered"
-                      value={d.docId}
+                      value={JSON.stringify(d)}
                       defaultChecked={d.isRegistered}
                       onChange={(e) => handleChange(e)}
                     ></input>
