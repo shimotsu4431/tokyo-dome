@@ -15,7 +15,7 @@ export const Login: React.FC = () => {
       <Layout>
         <div>
           <h1>Login</h1>
-          <p>データ管理用ページ</p>
+          <p>管理人ログイン用ページ</p>
         </div>
       </Layout>
     </div>

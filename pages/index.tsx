@@ -31,6 +31,16 @@ export const Home: React.FC = () => {
           <Link href="/register">
             <a>登録ページへ</a>
           </Link>
+          <div>
+            <Link href="/admin">
+              <a>admin</a>
+            </Link>
+          </div>
+          <div>
+            <Link href="/login">
+              <a>login</a>
+            </Link>
+          </div>
         </div>
       </Layout>
     </div>
