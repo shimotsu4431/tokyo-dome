@@ -1,9 +1,11 @@
 import Head from 'next/head'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Layout } from '../components/Layout'
 import 'firebase/auth'
 import { useForm } from 'react-hook-form'
 import styles from '../styles/pages/Login.module.scss'
+import firebase from '../lib/firebase'
+import { globalStoreContext } from '../store/GlobalStore'
 
 type FormType = {
   email: string
@@ -11,6 +13,8 @@ type FormType = {
 }
 
 export const Login: React.FC = () => {
+  const { globalDispatch } = useContext(globalStoreContext)
+
   const {
     register,
     handleSubmit,
@@ -19,7 +23,26 @@ export const Login: React.FC = () => {
 
   const onSubmit = (data: FormType) => {
     console.log(data)
-    alert('ログインしました！')
+    const { email, password } = data
+
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        console.log('userCredential.user', userCredential.user)
+
+        if (userCredential.user) {
+          globalDispatch({
+            type: 'CHANGE_USER',
+            payload: userCredential.user,
+          })
+          alert('ログインしました！')
+        }
+      })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .catch((error) => {
+        alert('ログインエラー')
+      })
   }
 
   return (

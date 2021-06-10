@@ -1,9 +1,11 @@
 import React, { Dispatch, useReducer } from 'react'
+import firebase from '../lib/firebase'
 import immer from 'immer'
 
 export type GlobalStore = {
   searchNumber: number
   searchPref: number
+  user: firebase.User | null
 }
 
 export type GlobalAction =
@@ -18,11 +20,16 @@ export type GlobalAction =
   | {
       type: 'RESET'
     }
+  | {
+      type: 'CHANGE_USER'
+      payload: firebase.User
+    }
 
 /** グローバルステートの初期値 */
 export const initialState: GlobalStore = {
   searchNumber: 100,
   searchPref: 1,
+  user: null,
 }
 
 /** reducer */
@@ -34,6 +41,10 @@ const reducer = immer((draft: GlobalStore, action: GlobalAction) => {
     }
     case 'CHANGE_SEARCH_PREF': {
       draft.searchPref = action.payload
+      break
+    }
+    case 'CHANGE_USER': {
+      draft.user = action.payload
       break
     }
     case 'RESET': {
