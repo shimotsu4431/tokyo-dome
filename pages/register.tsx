@@ -32,6 +32,8 @@ export const Register: React.FC = () => {
         area: Number(area),
         isRegistered: false,
         prefId: Number(prefId),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: null,
       })
       .then(() => {
         alert('データを送信しました！')
