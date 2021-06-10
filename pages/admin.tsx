@@ -31,17 +31,15 @@ export const Admin: React.FC = () => {
 
   const handleChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (window.confirm('ステートを変更しますか？')) {
-        const data = JSON.parse(e.target.value)
-        const docId = data.docId
-        const prefId = data.prefId
-        // 該当ドキュメントのステート変更
-        const dataRef = db.collection(String(prefId)).doc(docId)
-        await dataRef.update({
-          isRegistered: e.target.checked,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        })
-      }
+      const data = JSON.parse(e.target.value)
+      const docId = data.docId
+      const prefId = data.prefId
+      // 該当ドキュメントのステート変更
+      const dataRef = db.collection(String(prefId)).doc(docId)
+      await dataRef.update({
+        isRegistered: e.target.checked,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
     },
     []
   )
@@ -60,7 +58,6 @@ export const Admin: React.FC = () => {
           <p>管理者用のログインページ</p>
           <ul>
             {data.map((d) => {
-              console.log(d)
               return (
                 <li key={d.name}>
                   【{prefData[d.prefId - 1].name}】{d.name}: {d.area}[m^2]
@@ -70,7 +67,13 @@ export const Admin: React.FC = () => {
                       id="isRegistered"
                       value={JSON.stringify(d)}
                       defaultChecked={d.isRegistered}
-                      onChange={(e) => handleChange(e)}
+                      onChange={(e) => {
+                        if (window.confirm('ステートを変更しますか？')) {
+                          handleChange(e)
+                        } else {
+                          e.currentTarget.checked = !e.currentTarget.checked
+                        }
+                      }}
                     ></input>
                     isRegistered
                   </label>
