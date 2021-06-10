@@ -21,8 +21,8 @@ export const PrefForm: React.FC = () => {
       >
         {prefData.map((p, idx) => {
           return (
-            <option key={idx} value={idx}>
-              {p}
+            <option key={idx} value={p.id}>
+              {p.name}
             </option>
           )
         })}

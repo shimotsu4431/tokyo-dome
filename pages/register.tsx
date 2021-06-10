@@ -31,6 +31,7 @@ export const Register: React.FC = () => {
         name: name,
         area: Number(area),
         isRegistered: false,
+        prefId: Number(prefId),
       })
       .then(() => {
         alert('データを送信しました！')
@@ -79,8 +80,8 @@ export const Register: React.FC = () => {
             >
               {prefData.map((p, idx) => {
                 return (
-                  <option key={idx} value={idx}>
-                    {p}
+                  <option key={idx} value={p.id}>
+                    {p.name}
                   </option>
                 )
               })}

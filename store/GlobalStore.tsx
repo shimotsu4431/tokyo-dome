@@ -22,7 +22,7 @@ export type GlobalAction =
 /** グローバルステートの初期値 */
 export const initialState: GlobalStore = {
   searchNumber: 100,
-  searchPref: 0,
+  searchPref: 1,
 }
 
 /** reducer */
@@ -37,7 +37,7 @@ const reducer = immer((draft: GlobalStore, action: GlobalAction) => {
       break
     }
     case 'RESET': {
-      draft.searchPref = 0
+      draft.searchPref = 1
       draft.searchNumber = 100
       break
     }
