@@ -24,7 +24,10 @@ export const Result: React.FC = () => {
 
     const data: firebase.firestore.DocumentData[] = []
     async function getData(prefId: string) {
-      const querySnapshot = await db.collection(prefId).get()
+      const querySnapshot = await db
+        .collection(prefId)
+        .where('isRegistered', '==', true)
+        .get()
       querySnapshot.forEach((postDoc) => {
         data.push(postDoc.data())
       })
@@ -51,16 +54,20 @@ export const Result: React.FC = () => {
       </Head>
 
       <Layout>
-        <div>
-          {selectedArea && (
-            <div>
-              <p>
-                {globalStore.searchNumber} km^2 は、{selectedArea.name}の約{' '}
-                {comparedNum} 個分の広さです。
-              </p>
-            </div>
-          )}
-        </div>
+        {areas && areas.length ? (
+          <div>
+            {selectedArea && (
+              <div>
+                <p>
+                  {globalStore.searchNumber} km^2 は、{selectedArea.name}の約{' '}
+                  {comparedNum} 個分の広さです。
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div>登録データがありません</div>
+        )}
       </Layout>
     </>
   )
