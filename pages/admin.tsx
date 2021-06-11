@@ -17,6 +17,9 @@ export const Admin: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, removeCookie] = useCookies(['user'])
   const [isVisible, setIsVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  console.log('data', data)
 
   useEffect(() => {
     if (!cookies.user) {
@@ -37,10 +40,12 @@ export const Admin: React.FC = () => {
 
     // hooksにまとめる
     async function getAllData() {
+      setIsLoading(true)
       for (const pref of prefData) {
         await getPrefData(String(pref.id))
       }
       setData(data)
+      setIsLoading(false)
     }
 
     getAllData()
@@ -106,36 +111,40 @@ export const Admin: React.FC = () => {
             <button onClick={handleLogout} className={styles.button}>
               ログアウト
             </button>
-            <ul>
-              {data.map((d) => {
-                return (
-                  <li key={d.name}>
-                    【{prefData[d.prefId - 1].name}】{d.name}: {d.area}[m^2]
-                    <label className={styles.label}>
-                      <input
-                        type="checkbox"
-                        id="isRegistered"
-                        value={JSON.stringify(d)}
-                        defaultChecked={d.isRegistered}
-                        className={styles.checkbox}
-                        onChange={(e) => {
-                          if (
-                            window.confirm(
-                              'isRegistered のステートを変更しますか？'
-                            )
-                          ) {
-                            handleChange(e)
-                          } else {
-                            e.currentTarget.checked = !e.currentTarget.checked
-                          }
-                        }}
-                      ></input>
-                      isRegistered
-                    </label>
-                  </li>
-                )
-              })}
-            </ul>
+            {!isLoading ? (
+              <ul>
+                {data.map((d) => {
+                  return (
+                    <li key={d.name}>
+                      【{prefData[d.prefId - 1].name}】{d.name}: {d.area}[m^2]
+                      <label className={styles.label}>
+                        <input
+                          type="checkbox"
+                          id="isRegistered"
+                          value={JSON.stringify(d)}
+                          defaultChecked={d.isRegistered}
+                          className={styles.checkbox}
+                          onChange={(e) => {
+                            if (
+                              window.confirm(
+                                'isRegistered のステートを変更しますか？'
+                              )
+                            ) {
+                              handleChange(e)
+                            } else {
+                              e.currentTarget.checked = !e.currentTarget.checked
+                            }
+                          }}
+                        ></input>
+                        isRegistered
+                      </label>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
         </Layout>
       )}
