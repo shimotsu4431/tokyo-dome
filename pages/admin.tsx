@@ -96,7 +96,7 @@ export const Admin: React.FC = () => {
         <Layout>
           <div>
             <h1>admin</h1>
-            <p>管理者用のログインページ</p>
+            <p>管理者用ページ</p>
             {globalStore && globalStore.user && (
               <>
                 <p>uid: {globalStore.user?.uid}</p>
