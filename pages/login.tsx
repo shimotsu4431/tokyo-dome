@@ -1,19 +1,25 @@
 import Head from 'next/head'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Layout } from '../components/Layout'
 import 'firebase/auth'
 import { useForm } from 'react-hook-form'
 import styles from '../styles/pages/Login.module.scss'
 import firebase from '../lib/firebase'
 import { globalStoreContext } from '../store/GlobalStore'
+import { useRouter } from 'next/router'
+import { useCookies } from 'react-cookie'
 
 type FormType = {
   email: string
   password: string
 }
 
+const maxAge = 2147483647
+
 export const Login: React.FC = () => {
   const { globalDispatch } = useContext(globalStoreContext)
+  const router = useRouter()
+  const [cookies, setCookie] = useCookies(['user'])
 
   const {
     register,
@@ -21,8 +27,14 @@ export const Login: React.FC = () => {
     formState: { errors },
   } = useForm()
 
+  // Cookie にユーザ情報があれば自動で /admin に遷移
+  useEffect(() => {
+    if (cookies.user.uid) {
+      router.push('/admin')
+    }
+  }, [])
+
   const onSubmit = (data: FormType) => {
-    console.log(data)
     const { email, password } = data
 
     firebase
@@ -31,13 +43,20 @@ export const Login: React.FC = () => {
       .then((userCredential) => {
         if (userCredential.user) {
           const { uid, email } = userCredential.user
+          const mappedUser = { uid, email }
 
           globalDispatch({
             type: 'CHANGE_USER',
-            payload: { uid, email },
+            payload: mappedUser,
           })
 
+          const options = {
+            maxAge,
+          }
+          setCookie('user', mappedUser, options)
+
           alert('ログインしました！')
+          router.push('/admin')
         }
       })
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
