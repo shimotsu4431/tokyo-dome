@@ -1,14 +1,16 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { Layout } from '../components/Layout'
 import firebase, { db } from '../lib/firebase'
 import 'firebase/auth'
 import prefData from '../lib/pref'
 import styles from '../styles/pages/Admin.module.scss'
+import { globalStoreContext } from '../store/GlobalStore'
 
 export const Admin: React.FC = () => {
+  const { globalStore } = useContext(globalStoreContext)
   const [data, setData] = useState<firebase.firestore.DocumentData[]>([])
   const router = useRouter()
   // TODO: removeCookie は引数がないとNGぽいので要調査
@@ -50,12 +52,17 @@ export const Admin: React.FC = () => {
       const docId = data.docId
       const prefId = data.prefId
       // 該当ドキュメントのステート変更
-      const dataRef = db.collection(String(prefId)).doc(docId)
-      await dataRef.update({
-        isRegistered: e.target.checked,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      })
-      alert('ステートを変更しました！')
+      try {
+        const dataRef = db.collection(String(prefId)).doc(docId)
+        await dataRef.update({
+          isRegistered: e.target.checked,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+        alert('ステートを変更しました！')
+      } catch {
+        alert('更新する権限を持っていません！')
+        e.target.checked = !e.target.checked
+      }
     },
     []
   )
@@ -90,6 +97,12 @@ export const Admin: React.FC = () => {
           <div>
             <h1>admin</h1>
             <p>管理者用のログインページ</p>
+            {globalStore && globalStore.user && (
+              <>
+                <p>uid: {globalStore.user?.uid}</p>
+                <p>email: {globalStore.user?.email}</p>
+              </>
+            )}
             <button onClick={handleLogout} className={styles.button}>
               ログアウト
             </button>

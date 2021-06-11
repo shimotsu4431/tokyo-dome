@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { shuffle } from 'lodash'
 
 export const Result: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false)
   const router = useRouter()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [areas, setAreas] =
@@ -33,6 +34,7 @@ export const Result: React.FC = () => {
       })
       setAreas(data)
       setSelectedArea(shuffle(data)[0])
+      setIsVisible(true)
     }
 
     getData(prefId)
@@ -66,7 +68,7 @@ export const Result: React.FC = () => {
             )}
           </div>
         ) : (
-          <div>登録データがありません</div>
+          isVisible && <div>登録データがありません</div>
         )}
       </Layout>
     </>
