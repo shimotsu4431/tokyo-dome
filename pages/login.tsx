@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Layout } from '../components/Layout'
 import 'firebase/auth'
 import { useForm } from 'react-hook-form'
@@ -20,6 +20,7 @@ export const Login: React.FC = () => {
   const { globalDispatch } = useContext(globalStoreContext)
   const router = useRouter()
   const [cookies, setCookie] = useCookies(['user'])
+  const [isVisible, setIsVisible] = useState(false)
 
   const {
     register,
@@ -29,8 +30,10 @@ export const Login: React.FC = () => {
 
   // Cookie にユーザ情報があれば自動で /admin に遷移
   useEffect(() => {
-    if (cookies.user.uid) {
+    if (cookies.user && cookies.user.uid) {
       router.push('/admin')
+    } else {
+      setIsVisible(true)
     }
   }, [])
 
@@ -73,34 +76,36 @@ export const Login: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout>
-        <div>
-          <h1>Login</h1>
-          <p>管理人ログイン用ページ</p>
-        </div>
+      {isVisible && (
+        <Layout>
+          <div>
+            <h1>Login</h1>
+            <p>管理人ログイン用ページ</p>
+          </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="email">メールアドレス</label>
-          <input
-            id="email"
-            type="eail"
-            className={styles.input}
-            {...register('email', { required: true })}
-          />
-          {errors.email && <p>email is required</p>}
-          <label htmlFor="password">パスワード</label>
-          <input
-            id="password"
-            type="password"
-            className={styles.input}
-            {...register('password', { required: true })}
-          />
-          {errors.password && <p>password is required</p>}
-          <button className={styles.button} type="submit">
-            送信
-          </button>
-        </form>
-      </Layout>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label htmlFor="email">メールアドレス</label>
+            <input
+              id="email"
+              type="eail"
+              className={styles.input}
+              {...register('email', { required: true })}
+            />
+            {errors.email && <p>email is required</p>}
+            <label htmlFor="password">パスワード</label>
+            <input
+              id="password"
+              type="password"
+              className={styles.input}
+              {...register('password', { required: true })}
+            />
+            {errors.password && <p>password is required</p>}
+            <button className={styles.button} type="submit">
+              送信
+            </button>
+          </form>
+        </Layout>
+      )}
     </div>
   )
 }
