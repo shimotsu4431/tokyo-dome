@@ -55,6 +55,7 @@ export const Admin: React.FC = () => {
         isRegistered: e.target.checked,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
+      alert('ステートを変更しました！')
     },
     []
   )
@@ -97,14 +98,19 @@ export const Admin: React.FC = () => {
                 return (
                   <li key={d.name}>
                     【{prefData[d.prefId - 1].name}】{d.name}: {d.area}[m^2]
-                    <label style={{ marginLeft: 15, display: 'inline-block' }}>
+                    <label className={styles.label}>
                       <input
                         type="checkbox"
                         id="isRegistered"
                         value={JSON.stringify(d)}
                         defaultChecked={d.isRegistered}
+                        className={styles.checkbox}
                         onChange={(e) => {
-                          if (window.confirm('ステートを変更しますか？')) {
+                          if (
+                            window.confirm(
+                              'isRegistered のステートを変更しますか？'
+                            )
+                          ) {
                             handleChange(e)
                           } else {
                             e.currentTarget.checked = !e.currentTarget.checked

@@ -64,7 +64,7 @@ export const Login: React.FC = () => {
       })
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .catch((error) => {
-        alert('ログインエラー')
+        alert('ログインに失敗しました。')
       })
   }
 
@@ -83,7 +83,7 @@ export const Login: React.FC = () => {
             <p>管理人ログイン用ページ</p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <label htmlFor="email">メールアドレス</label>
             <input
               id="email"
