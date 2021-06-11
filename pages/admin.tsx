@@ -4,12 +4,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { Layout } from '../components/Layout'
 import firebase, { db } from '../lib/firebase'
+import 'firebase/auth'
 import prefData from '../lib/pref'
+import styles from '../styles/pages/Admin.module.scss'
 
 export const Admin: React.FC = () => {
   const [data, setData] = useState<firebase.firestore.DocumentData[]>([])
   const router = useRouter()
-  const [cookies] = useCookies(['user'])
+  // TODO: removeCookie は引数がないとNGぽいので要調査
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [cookies, removeCookie] = useCookies(['user'])
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -55,6 +59,23 @@ export const Admin: React.FC = () => {
     []
   )
 
+  const handleLogout = useCallback(() => {
+    if (confirm('ログアウトしますか？')) {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          alert('ログアウトしました！')
+          document.cookie = 'user=; max-age=0'
+          router.push('/login')
+        })
+        .catch((error) => {
+          // An error happened.
+          console.log(error)
+        })
+    }
+  }, [])
+
   return (
     <div>
       <Head>
@@ -68,6 +89,9 @@ export const Admin: React.FC = () => {
           <div>
             <h1>admin</h1>
             <p>管理者用のログインページ</p>
+            <button onClick={handleLogout} className={styles.button}>
+              ログアウト
+            </button>
             <ul>
               {data.map((d) => {
                 return (
