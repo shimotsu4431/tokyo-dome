@@ -1,5 +1,8 @@
 import React, { Dispatch, useReducer } from 'react'
 import immer from 'immer'
+import { useEffect } from 'react'
+import firebase from '../lib/firebase'
+import 'firebase/auth'
 
 export type mappedUserData = {
   uid: string
@@ -72,6 +75,20 @@ export const globalStoreContext = React.createContext<StoreWithAction>({
 
 const GlobalStoreProvider: React.FC = ({ children }) => {
   const [globalStore, globalDispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        const { uid, email } = user
+        const mappedUser = { uid, email }
+
+        globalDispatch({
+          type: 'CHANGE_USER',
+          payload: mappedUser,
+        })
+      }
+    })
+  }, [])
 
   return (
     <globalStoreContext.Provider value={{ globalStore, globalDispatch }}>
