@@ -1,0 +1,29 @@
+.wrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.5s;
+
+  &.isShow {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0s;
+  }
+}
+
+.content {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > p {
+    font-size: 28px;
+    font-weight: bold;
+  }
+}

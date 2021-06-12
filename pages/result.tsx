@@ -5,6 +5,7 @@ import { globalStoreContext } from '../store/GlobalStore'
 import firebase, { db } from '../lib/firebase'
 import { useRouter } from 'next/router'
 import { shuffle } from 'lodash'
+import { Loading } from '../components/Loading'
 
 export const Result: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -16,6 +17,14 @@ export const Result: React.FC = () => {
     useState<firebase.firestore.DocumentData | null>(null)
   const { globalStore } = useContext(globalStoreContext)
   const prefId = String(globalStore.searchPref)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+  }, [])
 
   useEffect(() => {
     if (globalStore.searchNumber === 0) {
@@ -55,6 +64,7 @@ export const Result: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Loading isLoading={isLoading} />
       <Layout>
         {areas && areas.length ? (
           <div>
