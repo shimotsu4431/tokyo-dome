@@ -18,8 +18,7 @@ export const Admin: React.FC = () => {
   const [cookies, removeCookie] = useCookies(['user'])
   const [isVisible, setIsVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
-  console.log('data', data)
+  const [isDeleted, setIsDeleted] = useState(false)
 
   useEffect(() => {
     if (!cookies.user) {
@@ -46,10 +45,11 @@ export const Admin: React.FC = () => {
       }
       setData(data)
       setIsLoading(false)
+      setIsDeleted(false)
     }
 
     getAllData()
-  }, [])
+  }, [isDeleted])
 
   const handleChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +72,29 @@ export const Admin: React.FC = () => {
     []
   )
 
+  const handleDelete = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement>,
+      d: firebase.firestore.DocumentData
+    ) => {
+      const docId = d.docId
+      const prefId = d.prefId
+
+      db.collection(String(prefId))
+        .doc(docId)
+        .delete()
+        .then(() => {
+          alert('delete success!')
+          setIsDeleted(true)
+        })
+        .catch((error) => {
+          console.log(error)
+          alert('delete error!')
+        })
+    },
+    []
+  )
+
   const handleLogout = useCallback(() => {
     if (confirm('ログアウトしますか？')) {
       firebase
@@ -83,7 +106,6 @@ export const Admin: React.FC = () => {
           router.push('/login')
         })
         .catch((error) => {
-          // An error happened.
           console.log(error)
         })
     }
@@ -138,6 +160,16 @@ export const Admin: React.FC = () => {
                         ></input>
                         isRegistered
                       </label>
+                      <button
+                        className={styles.deleteButton}
+                        onClick={(e) => {
+                          if (window.confirm('削除しますか？')) {
+                            handleDelete(e, d)
+                          }
+                        }}
+                      >
+                        delete
+                      </button>
                     </li>
                   )
                 })}
