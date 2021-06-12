@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Layout } from '../components/Layout'
 import styles from '../styles/pages/Register.module.scss'
@@ -7,6 +7,7 @@ import prefData from '../lib/pref'
 import { db } from '../lib/firebase'
 import firebase from '../lib/firebase'
 import 'firebase/auth'
+import { globalStoreContext } from '../store/GlobalStore'
 
 type FormType = {
   name: string
@@ -15,6 +16,7 @@ type FormType = {
 }
 
 export const Register: React.FC = () => {
+  const { globalStore } = useContext(globalStoreContext)
   const {
     register,
     handleSubmit,
@@ -34,6 +36,7 @@ export const Register: React.FC = () => {
         prefId: Number(prefId),
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: null,
+        author: globalStore.user?.uid,
       })
       .then(() => {
         alert('データを送信しました！')
