@@ -5,7 +5,7 @@ import styles from '../styles/components/Layout.module.scss'
 
 export const Layout: React.FC = ({ children }) => {
   return (
-    <div>
+    <>
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>
           <Link href="/">
@@ -14,6 +14,6 @@ export const Layout: React.FC = ({ children }) => {
         </h1>
       </header>
       <main className={styles.mainContainer}>{children}</main>
-    </div>
+    </>
   )
 }
