@@ -15,6 +15,16 @@ type FormType = {
   prefId: string
 }
 
+type SendData = {
+  name: string
+  area: number
+  isRegistered: boolean
+  prefId: number
+  createdAt: firebase.firestore.FieldValue
+  updatedAt: null
+  author: string
+}
+
 export const Register: React.FC = () => {
   const { globalStore } = useContext(globalStoreContext)
   const {
@@ -25,19 +35,22 @@ export const Register: React.FC = () => {
   } = useForm()
 
   const onSubmit = (data: FormType) => {
+    if (!globalStore.user) return alert('送信エラー！')
     const { name, area, prefId } = data
+
+    const areaData: SendData = {
+      name: name,
+      area: Number(area),
+      isRegistered: false,
+      prefId: Number(prefId),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: null,
+      author: globalStore.user?.uid,
+    }
 
     db.collection(prefId)
       .doc()
-      .set({
-        name: name,
-        area: Number(area),
-        isRegistered: false,
-        prefId: Number(prefId),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: null,
-        author: globalStore.user?.uid,
-      })
+      .set(areaData)
       .then(() => {
         alert('データを送信しました！')
         reset()

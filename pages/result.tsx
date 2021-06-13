@@ -34,11 +34,11 @@ export const Result: React.FC = () => {
 
     const data: firebase.firestore.DocumentData[] = []
     async function getData(prefId: string) {
-      const querySnapshot = await db
+      const snapshot = await db
         .collection(prefId)
         .where('isRegistered', '==', true)
         .get()
-      querySnapshot.forEach((postDoc) => {
+      snapshot.forEach((postDoc) => {
         data.push(postDoc.data())
       })
       setAreas(data)
