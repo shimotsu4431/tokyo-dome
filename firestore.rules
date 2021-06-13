@@ -3,7 +3,29 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      allow read, write: if request.auth.uid != null;
+      allow read
+
+      function isValidCreateArea(areaData){
+        return
+          areaData.size() == 7
+            && 'area' in areaData && areaData.area is number
+            && 'name' in areaData && areaData.name is string
+            && 'isRegistered' in areaData && areaData.isRegistered is bool
+            && 'prefId' in areaData && areaData.prefId is number
+            && 'author' in areaData && areaData.author is string
+            && 'createdAt' in areaData && areaData.createdAt is timestamp
+            && areaData.createdAt == request.time
+            && areaData.isRegistered == false
+            && areaData.author == request.auth.uid
+      }
+
+      function isAdminUser(){
+        return request.auth.token.email != null
+      }
+
+      allow create: if isValidCreateArea(request.resource.data)
+      allow update: if isAdminUser()
+      allow delete: if isAdminUser()
     }
   }
 }
