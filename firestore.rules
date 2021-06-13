@@ -3,28 +3,46 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      allow read
+
+      function isAdminUser(){
+        return request.auth.token.email != null
+      }
 
       function isValidCreateArea(areaData){
         return
           areaData.size() == 7
+            // 型チェック
             && 'area' in areaData && areaData.area is number
             && 'name' in areaData && areaData.name is string
             && 'isRegistered' in areaData && areaData.isRegistered is bool
             && 'prefId' in areaData && areaData.prefId is number
             && 'author' in areaData && areaData.author is string
             && 'createdAt' in areaData && areaData.createdAt is timestamp
+
+            // 初期値チェック
             && areaData.createdAt == request.time
             && areaData.isRegistered == false
             && areaData.author == request.auth.uid
       }
 
-      function isAdminUser(){
-        return request.auth.token.email != null
+      function isValidUpdateArea(areaData){
+        return
+          areaData.size() == 7
+            && areaData.updatedAt == request.time
+            && areaData.isRegistered is bool
+
+            // 以下は変わっていないこと
+            && areaData.createdAt == resource.data.createdAt
+            && areaData.name == resource.data.name
+            && areaData.area == resource.data.area
+            && areaData.prefId == resource.data.prefId
+            && areaData.author == resource.data.author
       }
 
+
+      allow read
       allow create: if isValidCreateArea(request.resource.data)
-      allow update: if isAdminUser()
+      allow update: if isAdminUser() && isValidUpdateArea(request.resource.data)
       allow delete: if isAdminUser()
     }
   }

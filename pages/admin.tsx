@@ -135,9 +135,9 @@ export const Admin: React.FC = () => {
             </button>
             {!isLoading ? (
               <ul>
-                {data.map((d) => {
+                {data.map((d, idx) => {
                   return (
-                    <li key={d.name}>
+                    <li key={idx}>
                       【{prefData[d.prefId - 1].name}】{d.name}: {d.area}[m^2]
                       <label className={styles.label}>
                         <input
@@ -162,6 +162,7 @@ export const Admin: React.FC = () => {
                       </label>
                       <button
                         className={styles.deleteButton}
+                        disabled={d.isRegistered}
                         onClick={(e) => {
                           if (window.confirm('削除しますか？')) {
                             handleDelete(e, d)
