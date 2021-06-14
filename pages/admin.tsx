@@ -162,7 +162,6 @@ export const Admin: React.FC = () => {
                       </label>
                       <button
                         className={styles.deleteButton}
-                        disabled={d.isRegistered}
                         onClick={(e) => {
                           if (window.confirm('削除しますか？')) {
                             handleDelete(e, d)
