@@ -16,7 +16,7 @@ export type AreaData = {
   area: number
   prefId: number
   createdAt: firebase.firestore.FieldValue
-  updatedAt: firebase.firestore.FieldValue
+  updatedAt: firebase.firestore.FieldValue | null
 }
 export type docId = {
   docId: string
@@ -42,7 +42,12 @@ export const isValid = (data: any): data is AreaData => {
   if (!(data.createdAt && typeof data.createdAt === 'object')) {
     return false
   }
-  if (!(data.updatedAt && typeof data.updatedAt === 'object')) {
+  if (
+    !(
+      typeof data.updatedAt === 'object' ||
+      typeof data.updatedAt === 'undefined'
+    )
+  ) {
     return false
   }
   return true

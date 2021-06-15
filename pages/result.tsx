@@ -2,20 +2,17 @@ import Head from 'next/head'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Layout } from '../components/Layout'
 import { globalStoreContext } from '../store/GlobalStore'
-import firebase, { db } from '../lib/firebase'
+import { db } from '../lib/firebase'
 import { useRouter } from 'next/router'
 import { shuffle } from 'lodash'
 import { Loading } from '../components/Loading'
-import { areaDataConverter } from './admin'
+import { AreaData, areaDataConverter } from './admin'
 
 export const Result: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false)
   const router = useRouter()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [areas, setAreas] =
-    useState<firebase.firestore.DocumentData[] | null>(null)
-  const [selectedArea, setSelectedArea] =
-    useState<firebase.firestore.DocumentData | null>(null)
+  const [areas, setAreas] = useState<AreaData[] | null>(null)
+  const [selectedArea, setSelectedArea] = useState<AreaData | null>(null)
   const { globalStore } = useContext(globalStoreContext)
   const prefId = String(globalStore.searchPref)
   const [isLoading, setIsLoading] = useState(false)
@@ -33,7 +30,7 @@ export const Result: React.FC = () => {
       router.push('/')
     }
 
-    const data: firebase.firestore.DocumentData[] = []
+    const data: AreaData[] = []
     async function getData(prefId: string) {
       const snapshot = await db
         .collection(prefId)
