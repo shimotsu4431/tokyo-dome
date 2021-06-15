@@ -6,6 +6,7 @@ import firebase, { db } from '../lib/firebase'
 import { useRouter } from 'next/router'
 import { shuffle } from 'lodash'
 import { Loading } from '../components/Loading'
+import { areaDataConverter } from './admin'
 
 export const Result: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -36,6 +37,7 @@ export const Result: React.FC = () => {
     async function getData(prefId: string) {
       const snapshot = await db
         .collection(prefId)
+        .withConverter(areaDataConverter)
         .where('isRegistered', '==', true)
         .get()
       snapshot.forEach((postDoc) => {

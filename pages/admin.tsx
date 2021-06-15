@@ -9,9 +9,83 @@ import prefData from '../lib/pref'
 import styles from '../styles/pages/Admin.module.scss'
 import { globalStoreContext } from '../store/GlobalStore'
 
+export type AreaData = {
+  name: string
+  author: string
+  isRegistered: boolean
+  area: number
+  prefId: number
+  createdAt: firebase.firestore.FieldValue
+  updatedAt: firebase.firestore.FieldValue
+}
+export type docId = {
+  docId: string
+}
+export type UnionAreaData = AreaData & docId
+
+export const isValid = (data: any): data is AreaData => {
+  if (!(data.name && typeof data.name === 'string')) {
+    return false
+  }
+  if (!(data.author && typeof data.author === 'string')) {
+    return false
+  }
+  if (!(typeof data.isRegistered === 'boolean')) {
+    return false
+  }
+  if (!(data.area && typeof data.area === 'number')) {
+    return false
+  }
+  if (!(data.prefId && typeof data.prefId === 'number')) {
+    return false
+  }
+  if (!(data.createdAt && typeof data.createdAt === 'object')) {
+    return false
+  }
+  if (!(data.updatedAt && typeof data.updatedAt === 'object')) {
+    return false
+  }
+  return true
+}
+
+export const areaDataConverter: firebase.firestore.FirestoreDataConverter<AreaData> =
+  {
+    fromFirestore(
+      snapshot: firebase.firestore.QueryDocumentSnapshot,
+      options: firebase.firestore.SnapshotOptions
+    ) {
+      const data = snapshot.data(options)
+      if (!isValid(data)) {
+        console.error(data)
+        alert('invalid data')
+        throw new Error('invalid data')
+      }
+      return {
+        name: data.name,
+        author: data.author,
+        isRegistered: data.isRegistered,
+        area: data.area,
+        prefId: data.prefId,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      }
+    },
+    toFirestore: (area: AreaData) => {
+      return {
+        name: area.name,
+        author: area.author,
+        isRegistered: area.isRegistered,
+        area: area.area,
+        prefId: area.prefId,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      }
+    },
+  }
+
 export const Admin: React.FC = () => {
   const { globalStore } = useContext(globalStoreContext)
-  const [data, setData] = useState<firebase.firestore.DocumentData[]>([])
+  const [data, setData] = useState<UnionAreaData[]>([])
   const router = useRouter()
   // TODO: removeCookie は引数がないとNGぽいので要調査
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,13 +101,17 @@ export const Admin: React.FC = () => {
       setIsVisible(true)
     }
 
-    const data: firebase.firestore.DocumentData[] = []
+    const data: UnionAreaData[] = []
 
     // hooksにまとめる
     async function getPrefData(prefId: string) {
-      const querySnapshot = await db.collection(prefId).get()
+      const querySnapshot = await db
+        .collection(prefId)
+        .withConverter(areaDataConverter)
+        .get()
       querySnapshot.forEach((postDoc) => {
-        data.push({ ...postDoc.data(), docId: postDoc.id })
+        const result = { ...postDoc.data(), docId: postDoc.id }
+        return data.push(result)
       })
     }
 
@@ -53,7 +131,7 @@ export const Admin: React.FC = () => {
 
   const handleChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const data = JSON.parse(e.target.value)
+      const data: UnionAreaData = JSON.parse(e.target.value)
       const docId = data.docId
       const prefId = data.prefId
       // 該当ドキュメントのステート変更
@@ -73,10 +151,7 @@ export const Admin: React.FC = () => {
   )
 
   const handleDelete = useCallback(
-    (
-      e: React.MouseEvent<HTMLButtonElement>,
-      d: firebase.firestore.DocumentData
-    ) => {
+    (e: React.MouseEvent<HTMLButtonElement>, d: UnionAreaData) => {
       const docId = d.docId
       const prefId = d.prefId
 

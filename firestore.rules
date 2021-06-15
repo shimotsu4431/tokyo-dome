@@ -39,7 +39,6 @@ service cloud.firestore {
             && areaData.author == resource.data.author
       }
 
-
       allow read
       allow create: if isValidCreateArea(request.resource.data)
       allow update: if isAdminUser() && isValidUpdateArea(request.resource.data)
