@@ -1,12 +1,8 @@
 // エミュレーターホスト指定
 process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080'
 
-// ローカルファイル操作用Nodeモジュール
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs = require('fs')
-// Firebase SDK テストユーティリティ
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const firebase = require('@firebase/rules-unit-testing')
+import * as firebase from '@firebase/testing'
+import * as fs from 'fs'
 
 // FirebaseのProject ID
 const PROJECT_ID = 'tokyo-dome'
@@ -25,7 +21,9 @@ afterAll(async () => {
 })
 
 // Firestoreの初期化
-function getAuthedFirestore(auth) {
+const getAuthedFirestore = (auth?: {
+  uid: string
+}): firebase.firestore.Firestore => {
   return firebase.initializeTestApp({ projectId: PROJECT_ID, auth }).firestore()
 }
 
